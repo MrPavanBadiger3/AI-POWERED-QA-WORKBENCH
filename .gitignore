@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+
+# Environment and sensitive keys
+.env
+.env.*
+!.env.example
+*.env
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+*.cert
+*.pfx
+
+# Python cache & artifacts
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+backend/qa_workbench.db
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+.vite/
+*.tsbuildinfo
+
+# Execution outputs and uploaded test data (keep directory structure)
+backend/reports/*
+!backend/reports/.gitkeep
+backend/screenshots/*
+!backend/screenshots/.gitkeep
+backend/automation/generated/test_gen_*.py
+backend/automation/test_data/uploads/*
+!backend/automation/test_data/uploads/.gitkeep
+
+# OS specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# NOTE: /artifacts is intentionally tracked (submission deliverables).
