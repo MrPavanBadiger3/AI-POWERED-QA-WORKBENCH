@@ -33,27 +33,27 @@ export const Header: React.FC<{ currentPage: string }> = ({ currentPage }) => {
   }, []);
 
   return (
-    <header className="flex items-center justify-between border-b border-slate-800 bg-[#11111a] px-6 h-14 shrink-0">
-      <div className="flex items-center gap-3">
-        <h1 className="text-sm font-semibold text-slate-100">{PAGE_TITLES[currentPage] || currentPage}</h1>
-        <span className="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700/60">AUT: SauceDemo</span>
+    <header className="flex min-h-[4.5rem] shrink-0 items-center justify-between gap-3 border-b border-hairline bg-white px-4 sm:px-6">
+      <div className="flex min-w-0 items-center gap-3">
+        <h1 className="truncate font-display text-xl leading-tight text-ink sm:text-2xl">{PAGE_TITLES[currentPage] || currentPage}</h1>
+        <span className="hidden rounded-md border border-beige-deep bg-cream px-2 py-1 text-[11px] font-medium text-slate-400 sm:inline-flex">AUT: SauceDemo</span>
       </div>
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-900/80 px-3 py-1">
+      <div className="flex shrink-0 items-center gap-4">
+        <div className="flex items-center gap-2 rounded-md border border-hairline bg-slate-50 px-2.5 py-1.5 sm:px-3" role="status" aria-live="polite">
           {apiStatus === 'connected' ? (
             <>
-              <Wifi size={13} className="text-emerald-400" />
-              <span className="text-xs font-medium text-emerald-400">Backend Online</span>
+              <Wifi size={13} aria-hidden="true" className="text-emerald-400" />
+              <span className="hidden text-xs font-medium text-emerald-400 sm:inline">Backend Online</span>
             </>
           ) : apiStatus === 'disconnected' ? (
             <>
-              <WifiOff size={13} className="text-rose-400" />
-              <span className="text-xs font-medium text-rose-400">Backend Offline</span>
+              <WifiOff size={13} aria-hidden="true" className="text-rose-400" />
+              <span className="hidden text-xs font-medium text-rose-400 sm:inline">Backend Offline</span>
             </>
           ) : (
             <>
-              <Activity size={13} className="text-amber-400 animate-pulse" />
-              <span className="text-xs font-medium text-amber-400">Checking...</span>
+              <Activity size={13} aria-hidden="true" className="animate-pulse text-amber-400" />
+              <span className="hidden text-xs font-medium text-amber-400 sm:inline">Checking…</span>
             </>
           )}
         </div>

@@ -79,10 +79,10 @@ export const RequirementsPage: React.FC<{ onSendToTestCases: (id: string) => voi
               <button type="button" className="cursor-pointer text-indigo-400 underline" onClick={() => setForm(SIMPLE)}>Load simple example</button>
               <button type="button" className="cursor-pointer text-indigo-400 underline" onClick={() => setForm(DETAILED)}>Load detailed example</button>
             </div>
-            <Field label="Title *"><input className={inputCls} required minLength={3} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></Field>
-            <Field label="Requirement / user story text *"><textarea className={inputCls} rows={4} required minLength={10} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></Field>
-            <Field label="User story (optional)"><textarea className={inputCls} rows={2} value={form.user_story} onChange={(e) => setForm({ ...form, user_story: e.target.value })} /></Field>
-            <Field label="Acceptance criteria (optional)"><textarea className={inputCls} rows={4} value={form.acceptance_criteria} onChange={(e) => setForm({ ...form, acceptance_criteria: e.target.value })} /></Field>
+            <Field label="Title *"><input name="requirement_title" autoComplete="off" className={inputCls} required minLength={3} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></Field>
+            <Field label="Requirement / user story text *"><textarea name="requirement_description" autoComplete="off" className={inputCls} rows={4} required minLength={10} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></Field>
+            <Field label="User story (optional)"><textarea name="user_story" autoComplete="off" className={inputCls} rows={2} value={form.user_story} onChange={(e) => setForm({ ...form, user_story: e.target.value })} /></Field>
+            <Field label="Acceptance criteria (optional)"><textarea name="acceptance_criteria" autoComplete="off" className={inputCls} rows={4} value={form.acceptance_criteria} onChange={(e) => setForm({ ...form, acceptance_criteria: e.target.value })} /></Field>
             <Btn type="submit" variant="primary" busy={busy === 'analyze'} className="w-full justify-center"><Sparkles size={13} />{busy === 'analyze' ? 'Analysing with AI…' : 'Analyze Requirement'}</Btn>
           </form>
           <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
@@ -123,10 +123,10 @@ export const RequirementsPage: React.FC<{ onSendToTestCases: (id: string) => voi
 
               {editing ? (
                 <div className="space-y-3 rounded-lg border border-slate-700 bg-slate-800/40 p-4">
-                  <Field label="Title"><input className={inputCls} value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} /></Field>
-                  <Field label="Requirement text"><textarea className={inputCls} rows={4} value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} /></Field>
-                  <Field label="User story"><textarea className={inputCls} rows={2} value={draft.user_story} onChange={(e) => setDraft({ ...draft, user_story: e.target.value })} /></Field>
-                  <Field label="Acceptance criteria"><textarea className={inputCls} rows={4} value={draft.acceptance_criteria} onChange={(e) => setDraft({ ...draft, acceptance_criteria: e.target.value })} /></Field>
+                  <Field label="Title"><input name="edited_requirement_title" autoComplete="off" className={inputCls} value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} /></Field>
+                  <Field label="Requirement text"><textarea name="edited_requirement_description" autoComplete="off" className={inputCls} rows={4} value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} /></Field>
+                  <Field label="User story"><textarea name="edited_user_story" autoComplete="off" className={inputCls} rows={2} value={draft.user_story} onChange={(e) => setDraft({ ...draft, user_story: e.target.value })} /></Field>
+                  <Field label="Acceptance criteria"><textarea name="edited_acceptance_criteria" autoComplete="off" className={inputCls} rows={4} value={draft.acceptance_criteria} onChange={(e) => setDraft({ ...draft, acceptance_criteria: e.target.value })} /></Field>
                   <div className="flex gap-2"><Btn variant="primary" onClick={saveEdit} busy={busy === 'edit'}>Save changes</Btn><Btn onClick={() => setEditing(false)}>Cancel</Btn></div>
                   <p className="text-[11px] text-slate-500">Saving changes does not alter the preserved original source below.</p>
                 </div>
@@ -136,7 +136,7 @@ export const RequirementsPage: React.FC<{ onSendToTestCases: (id: string) => voi
                   {sel.user_story && <p><b className="text-slate-400">User story:</b> {sel.user_story}</p>}
                   {sel.acceptance_criteria && <p className="whitespace-pre-wrap"><b className="text-slate-400">Acceptance criteria:</b> {sel.acceptance_criteria}</p>}
                   <button className="cursor-pointer text-[11px] text-indigo-400 underline" onClick={() => setShowSource(!showSource)}>{showSource ? 'Hide' : 'Show'} preserved original source</button>
-                  {showSource && <pre className="overflow-x-auto rounded bg-slate-950 p-3 text-[11px] text-slate-400">{JSON.stringify(sel.source_snapshot, null, 2)}</pre>}
+                  {showSource && <pre className="code-panel overflow-x-auto rounded-md bg-code-surface p-3 font-mono text-[11px] text-code-text">{JSON.stringify(sel.source_snapshot, null, 2)}</pre>}
                 </div>
               )}
 

@@ -62,11 +62,11 @@ export const DocumentationPage: React.FC = () => {
         <h2 className="mb-1 text-sm font-semibold text-slate-100">Generate test documentation</h2>
         <p className="mb-3 text-xs text-slate-400">Built from <b>approved</b> requirements and test cases plus stored execution figures. The optional AI narrative may only use those facts.</p>
         <div className="flex flex-wrap items-center gap-3">
-          <label className="flex items-center gap-2 text-xs text-slate-300"><input type="checkbox" checked={useAi} onChange={(e) => setUseAi(e.target.checked)} />Include AI narrative</label>
+          <label className="flex min-h-9 items-center gap-2 text-xs text-slate-300"><input name="include_ai_narrative" type="checkbox" checked={useAi} onChange={(e) => setUseAi(e.target.checked)} />Include AI narrative</label>
           <Btn variant="primary" busy={busy === 'gen'} onClick={generate}><Sparkles size={12} />Generate documentation</Btn>
           <Btn busy={busy === 'exp'} onClick={exportAll}><FolderDown size={12} />Export all artifacts to /artifacts</Btn>
         </div>
-        {markdown && <pre className="mt-4 max-h-[28rem] overflow-auto whitespace-pre-wrap rounded-lg bg-slate-950 p-4 text-[11px] text-slate-300">{markdown}</pre>}
+        {markdown && <pre className="code-panel mt-4 max-h-[28rem] overflow-auto whitespace-pre-wrap rounded-lg bg-code-surface p-4 font-mono text-[11px] text-code-text">{markdown}</pre>}
         {docs.length > 0 && <div className="mt-4"><h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Generated documents</h3>
           <ul className="space-y-1 text-xs">{docs.map((d) => <li key={d.id} className="flex items-center gap-3 text-slate-300"><span className="font-mono text-indigo-400">{d.doc_id}</span><span>{new Date(d.created_at).toLocaleString()}</span><span className="text-slate-500">{d.has_ai_narrative ? 'with AI narrative' : 'no AI narrative'}</span><a className="text-indigo-400 underline" href={docApi.downloadUrl(d.id)}>Download .md</a></li>)}</ul></div>}
       </section>

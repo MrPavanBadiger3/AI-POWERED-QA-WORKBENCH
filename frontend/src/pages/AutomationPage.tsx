@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Play, Sparkles, CheckCircle2, XCircle, Save, FileCode } from 'lucide-react';
+import { Play, Sparkles, CheckCircle2, XCircle, Save, FileCode, Download } from 'lucide-react';
 import { automationApi, executionsApi, testCasesApi, reportsApi } from '../services/api';
 import { Script, TestCase } from '../types';
 import { useExecution } from '../hooks/useExecution';
@@ -90,10 +90,12 @@ export const AutomationPage: React.FC<{ onAnalyzeDefect: (resultId: string) => v
           <ResultsTable results={ex.results} onAnalyze={onAnalyzeDefect} />
           <div className="flex flex-wrap gap-2 border-t border-slate-800 p-3">
             <Btn onClick={() => setShowLogs(!showLogs)}>{showLogs ? 'Hide' : 'View'} execution log</Btn>
-            {e.report_available && <a className="inline-flex items-center rounded-lg border border-slate-700/60 bg-slate-800 px-3 py-1.5 text-xs text-slate-200 hover:bg-slate-700" target="_blank" rel="noreferrer" href={reportsApi.pytestUrl(e.execution_id)}>Open pytest HTML report</a>}
-            {!ex.running && <a className="inline-flex items-center rounded-lg border border-slate-700/60 bg-slate-800 px-3 py-1.5 text-xs text-slate-200 hover:bg-slate-700" target="_blank" rel="noreferrer" href={reportsApi.summaryUrl(e.execution_id)}>Generate HTML summary</a>}
+            {e.report_available && <a className="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 py-1.5 text-xs text-slate-200 hover:bg-cream" target="_blank" rel="noreferrer" href={reportsApi.pytestUrl(e.execution_id)}>Open pytest HTML report</a>}
+            {e.report_available && <a className="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 py-1.5 text-xs text-slate-200 hover:bg-cream" href={reportsApi.pytestDownloadUrl(e.execution_id)}><Download size={12} aria-hidden="true" />Download HTML</a>}
+            {!ex.running && <a className="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 py-1.5 text-xs text-slate-200 hover:bg-cream" target="_blank" rel="noreferrer" href={reportsApi.summaryUrl(e.execution_id)}>Generate HTML summary</a>}
+            {!ex.running && <a className="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 py-1.5 text-xs text-slate-200 hover:bg-cream" href={reportsApi.summaryDownloadUrl(e.execution_id)}><Download size={12} aria-hidden="true" />Download summary HTML</a>}
           </div>
-          {showLogs && <pre className="max-h-80 overflow-auto border-t border-slate-800 bg-slate-950 p-3 text-[11px] text-slate-400">{ex.logs}</pre>}
+          {showLogs && <pre className="code-panel max-h-80 overflow-auto border-t border-slate-800 bg-code-surface p-3 font-mono text-[11px] text-code-text">{ex.logs}</pre>}
         </section>
       )}
 
@@ -119,12 +121,12 @@ export const AutomationPage: React.FC<{ onAnalyzeDefect: (resultId: string) => v
         )}
 
         {openScript && (
-          <div className="mt-4 space-y-3 rounded-lg border border-slate-700 bg-slate-950/60 p-4">
+          <div className="mt-4 space-y-3 rounded-lg border border-hairline bg-cream-light p-4">
             <div className="flex items-center justify-between"><h3 className="text-xs font-semibold text-slate-100">{openScript.script_id} <StatusBadge status={openScript.status} /></h3><button className="cursor-pointer text-xs text-slate-400" onClick={() => setOpenScript(null)}>Close ✕</button></div>
             {openScript.explanation && <p className="text-xs text-slate-300"><b className="text-slate-400">AI explanation:</b> {openScript.explanation}</p>}
             {openScript.notes && <p className="text-xs text-slate-400"><b>Notes:</b> {openScript.notes}</p>}
             <IssueList issues={openScript.validation_issues} />
-            <textarea aria-label="Script source" className={`${inputCls} font-mono`} rows={14} value={code} onChange={(x) => setCode(x.target.value)} spellCheck={false} />
+            <textarea name="script_source" autoComplete="off" aria-label="Script source" className={`${inputCls} code-panel min-h-72 bg-code-surface font-mono text-code-text`} rows={14} value={code} onChange={(x) => setCode(x.target.value)} spellCheck={false} />
             <div className="flex flex-wrap gap-2">
               <Btn onClick={saveCode} disabled={code === openScript.code}><Save size={12} />Save edits (re-validate)</Btn>
               <Btn variant="success" disabled={openScript.status === 'approved' || code !== openScript.code} onClick={() => scriptAct(() => automationApi.approveScript(openScript.id), 'Script approved and written to automation/generated. Run it with the “Approved AI scripts” suite.')}><CheckCircle2 size={12} />Approve for execution</Btn>

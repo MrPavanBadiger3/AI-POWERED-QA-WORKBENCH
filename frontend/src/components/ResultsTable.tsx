@@ -35,9 +35,9 @@ export const ResultsTable: React.FC<{ results: TestResult[]; onAnalyze?: (result
                 </td>
               </tr>
               {open === r.id && (
-                <tr><td colSpan={showData ? 8 : 5} className="bg-slate-950/60 px-3 py-3">
-                  <pre className="max-h-64 overflow-auto whitespace-pre-wrap text-[11px] text-rose-300">{r.error_message || 'No exception text was captured.'}</pre>
-                  {r.screenshot_url && <img src={r.screenshot_url} alt={`Failure screenshot for ${r.test_name}`} className="mt-3 max-h-80 rounded border border-slate-700" />}
+                <tr><td colSpan={showData ? 8 : 5} className="bg-cream-light px-3 py-3">
+                  <pre className="code-panel max-h-64 overflow-auto whitespace-pre-wrap rounded-md bg-code-surface p-3 font-mono text-[11px] text-code-text">{r.error_message || 'No exception text was captured.'}</pre>
+                  {r.screenshot_url && <img src={r.screenshot_url} alt={`Failure screenshot for ${r.test_name}`} width={1280} height={720} loading="lazy" className="mt-3 max-h-80 max-w-full rounded border border-slate-700 object-contain object-left" />}
                 </td></tr>
               )}
             </React.Fragment>

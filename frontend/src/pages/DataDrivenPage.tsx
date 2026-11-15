@@ -44,7 +44,7 @@ export const DataDrivenPage: React.FC<{ onAnalyzeDefect: (id: string) => void }>
         <p className="mb-3 text-xs text-slate-400">One parameterised pytest function runs once per row. Data lives in CSV, not in code. Required columns: <code className="text-slate-300">username, password, expected_outcome</code> (success|failure). Blank cells mean empty input.</p>
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <select aria-label="Dataset" className={`${inputCls} w-auto`} value={dataset} onChange={(x) => load(x.target.value)}>{datasets.map((d) => <option key={d}>{d}</option>)}</select>
-          <input ref={file} type="file" accept=".csv" className="hidden" onChange={(x) => upload(x.target.files?.[0])} aria-label="Upload CSV dataset" />
+          <input ref={file} name="dataset_file" type="file" accept=".csv" className="hidden" onChange={(x) => upload(x.target.files?.[0])} aria-label="Upload CSV dataset" />
           <Btn onClick={() => file.current?.click()}><Upload size={12} />Upload CSV</Btn>
           <Btn variant="primary" busy={busy || ex.running} onClick={run}><Play size={12} />Run data-driven tests</Btn>
         </div>

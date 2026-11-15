@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BarChart3, ExternalLink } from 'lucide-react';
+import { BarChart3, Download, ExternalLink } from 'lucide-react';
 import { executionsApi, reportsApi } from '../services/api';
 import { Execution, TestResult } from '../types';
 import { ErrorMessage } from '../components/ErrorMessage';
@@ -9,7 +9,7 @@ import { LoadingSpinner } from '../components/LoadingSpinner';
 import { ResultsTable } from '../components/ResultsTable';
 import { ago } from '../components/ui';
 
-const linkCls = 'inline-flex items-center gap-1 rounded-lg border border-slate-700/60 bg-slate-800 px-3 py-1.5 text-xs text-slate-200 hover:bg-slate-700';
+const linkCls = 'inline-flex min-h-9 items-center gap-1 rounded-md border border-hairline-strong bg-white px-3 py-1.5 text-xs text-slate-200 hover:bg-cream';
 
 export const ReportsPage: React.FC = () => {
   const [execs, setExecs] = useState<Execution[]>([]);
@@ -38,13 +38,20 @@ export const ReportsPage: React.FC = () => {
           <table className="w-full text-left text-xs">
             <thead className="border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400"><tr>{['Execution', 'Suite', 'Started', 'Ended', 'Total', 'Passed', 'Failed', 'Skipped', 'Duration', 'Status', 'Reports'].map((h) => <th key={h} className="px-3 py-3">{h}</th>)}</tr></thead>
             <tbody>{execs.map((e) => (
-              <tr key={e.id} className={`cursor-pointer border-b border-slate-800/60 hover:bg-slate-800/30 ${sel?.id === e.id ? 'bg-indigo-600/10' : ''}`} onClick={() => open(e)}>
+              <tr key={e.id} tabIndex={0} aria-label={`Open execution ${e.execution_id}`} className={`cursor-pointer border-b border-slate-800/60 hover:bg-slate-800/30 focus-visible:bg-cream ${sel?.id === e.id ? 'bg-indigo-600/10' : ''}`} onClick={() => open(e)} onKeyDown={(event) => {
+                if (event.target !== event.currentTarget) return;
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  open(e);
+                }
+              }}>
                 <td className="px-3 py-3 font-mono text-indigo-400">{e.execution_id}</td><td className="px-3 py-3 text-slate-300">{e.suite_name}</td>
                 <td className="px-3 py-3 text-slate-400">{ago(e.start_time)}</td><td className="px-3 py-3 text-slate-400">{ago(e.end_time)}</td>
                 <td className="px-3 py-3">{e.total_tests}</td><td className="px-3 py-3 text-emerald-400">{e.passed}</td><td className="px-3 py-3 text-rose-400">{e.failed}</td><td className="px-3 py-3 text-yellow-400">{e.skipped}</td>
                 <td className="px-3 py-3 text-slate-400">{e.duration ? `${e.duration.toFixed(1)}s` : '—'}</td><td className="px-3 py-3"><StatusBadge status={e.overall_status} /></td>
                 <td className="px-3 py-3" onClick={(x) => x.stopPropagation()}><div className="flex gap-1.5">
                   {e.report_available && <a className={linkCls} target="_blank" rel="noreferrer" href={reportsApi.pytestUrl(e.execution_id)}><ExternalLink size={11} />pytest</a>}
+                  {e.report_available && <a className={linkCls} href={reportsApi.pytestDownloadUrl(e.execution_id)}><Download size={11} aria-hidden="true" />Download HTML</a>}
                   {e.summary_report_available && <a className={linkCls} target="_blank" rel="noreferrer" href={reportsApi.summaryUrl(e.execution_id)}><ExternalLink size={11} />summary</a>}</div></td>
               </tr>))}</tbody>
           </table>
@@ -55,7 +62,7 @@ export const ReportsPage: React.FC = () => {
           <div className="border-b border-slate-800 p-4 text-sm font-semibold text-slate-100">Execution details — <span className="font-mono text-indigo-400">{sel.execution_id}</span></div>
           {sel.error_message && <div className="m-4"><ErrorMessage message={sel.error_message} /></div>}
           <ResultsTable results={results} showData={sel.suite_name === 'data_driven'} />
-          <details className="border-t border-slate-800 p-3"><summary className="cursor-pointer text-xs text-slate-400">Execution log</summary><pre className="mt-2 max-h-80 overflow-auto bg-slate-950 p-3 text-[11px] text-slate-400">{logs}</pre></details>
+          <details className="border-t border-slate-800 p-3"><summary className="cursor-pointer text-xs text-slate-400">Execution log</summary><pre className="code-panel mt-2 max-h-80 overflow-auto rounded-md bg-code-surface p-3 font-mono text-[11px] text-code-text">{logs}</pre></details>
         </div>
       )}
     </div>

@@ -98,7 +98,7 @@ export const TestCasesPage: React.FC<{ initialRequirementId?: string }> = ({ ini
             <div className="mt-2 grid gap-1 md:grid-cols-2">
               {req.analysis.scenarios.map((s) => (
                 <label key={s.id} className="flex items-start gap-2 rounded border border-slate-800 p-2">
-                  <input type="checkbox" checked={picked.includes(s.id)} onChange={(e) => setPicked(e.target.checked ? [...picked, s.id] : picked.filter((x) => x !== s.id))} />
+                  <input type="checkbox" name="scenario_ids" checked={picked.includes(s.id)} onChange={(e) => setPicked(e.target.checked ? [...picked, s.id] : picked.filter((x) => x !== s.id))} />
                   <span><span className="font-mono text-slate-400">{s.id}</span> {s.title} <span className="text-slate-500">({s.category})</span></span>
                 </label>
               ))}
@@ -110,7 +110,7 @@ export const TestCasesPage: React.FC<{ initialRequirementId?: string }> = ({ ini
       </div>
 
       <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/60 p-3">
-        <div className="relative min-w-52 flex-1"><Search size={13} className="absolute left-3 top-2.5 text-slate-500" /><input aria-label="Search test cases" className={`${inputCls} pl-8`} placeholder="Search ID, scenario, module" value={q} onChange={(e) => setQ(e.target.value)} /></div>
+        <div className="relative min-w-52 flex-1"><Search size={13} aria-hidden="true" className="absolute left-3 top-2.5 text-slate-500" /><input name="test_case_search" autoComplete="off" aria-label="Search test cases" className={`${inputCls} pl-8`} placeholder="Search ID, scenario, module…" value={q} onChange={(e) => setQ(e.target.value)} /></div>
         <select aria-label="Priority filter" className={`${inputCls} w-auto`} value={prio} onChange={(e) => setPrio(e.target.value)}><option value="ALL">All priorities</option>{['High', 'Medium', 'Low'].map((p) => <option key={p}>{p}</option>)}</select>
         <select aria-label="Type filter" className={`${inputCls} w-auto`} value={type} onChange={(e) => setType(e.target.value)}><option value="ALL">All types</option>{TYPES.map((p) => <option key={p}>{p}</option>)}</select>
         <select aria-label="Review status filter" className={`${inputCls} w-auto`} value={status} onChange={(e) => setStatus(e.target.value)}><option value="ALL">All review statuses</option>{['pending', 'approved', 'rejected', 'needs_modification'].map((p) => <option key={p}>{p}</option>)}</select>
@@ -155,7 +155,7 @@ export const TestCasesPage: React.FC<{ initialRequirementId?: string }> = ({ ini
               {view.expected_basis && <Pill tone={view.expected_basis === 'insufficient_information' ? 'amber' : 'green'}>expected result basis: {view.expected_basis.replace(/_/g, ' ')}</Pill>}</div>
             <p><b className="text-slate-400">Preconditions:</b> {view.preconditions || '—'}</p>
             <div><b className="text-slate-400">Steps:</b><ol className="mt-1 list-inside list-decimal space-y-0.5">{(view.test_steps ?? []).map((s, i) => <li key={i}>{s}</li>)}</ol></div>
-            <div><b className="text-slate-400">Test data:</b><pre className="mt-1 rounded bg-slate-950 p-2 text-[11px]">{JSON.stringify(view.test_data, null, 2)}</pre></div>
+            <div><b className="text-slate-400">Test data:</b><pre className="code-panel mt-1 overflow-x-auto rounded-md bg-code-surface p-2 font-mono text-[11px] text-code-text">{JSON.stringify(view.test_data, null, 2)}</pre></div>
             <p><b className="text-slate-400">Expected result:</b> {view.expected_result}</p>
             <p><b className="text-slate-400">Automation link:</b> {view.automation_ref || 'not linked'}</p>
             <IssueList issues={view.validation_flags} />
@@ -170,16 +170,16 @@ export const TestCasesPage: React.FC<{ initialRequirementId?: string }> = ({ ini
       {edit && (
         <Modal title={`Edit ${edit.tc_id}`} onClose={() => setEdit(null)} wide>
           <div className="grid gap-3 md:grid-cols-2">
-            <Field label="Module"><input className={inputCls} value={form.module} onChange={(e) => setForm({ ...form, module: e.target.value })} /></Field>
-            <Field label="Test scenario"><input className={inputCls} value={form.test_scenario} onChange={(e) => setForm({ ...form, test_scenario: e.target.value })} /></Field>
-            <Field label="Preconditions"><textarea rows={2} className={inputCls} value={form.preconditions} onChange={(e) => setForm({ ...form, preconditions: e.target.value })} /></Field>
-            <Field label="Expected result" hint={form.expected_result.startsWith('Insufficient') ? 'Undefined: a human must define it before approval.' : undefined}><textarea rows={2} className={inputCls} value={form.expected_result} onChange={(e) => setForm({ ...form, expected_result: e.target.value })} /></Field>
-            <Field label="Steps (one per line)"><textarea rows={6} className={inputCls} value={form.steps} onChange={(e) => setForm({ ...form, steps: e.target.value })} /></Field>
-            <Field label="Test data (JSON)"><textarea rows={6} className={`${inputCls} font-mono`} value={form.test_data} onChange={(e) => setForm({ ...form, test_data: e.target.value })} /></Field>
-            <Field label="Priority"><select className={inputCls} value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })}>{['High', 'Medium', 'Low'].map((p) => <option key={p}>{p}</option>)}</select></Field>
-            <Field label="Test type"><select className={inputCls} value={form.test_type} onChange={(e) => setForm({ ...form, test_type: e.target.value })}>{TYPES.map((p) => <option key={p}>{p}</option>)}</select></Field>
+            <Field label="Module"><input name="test_module" autoComplete="off" className={inputCls} value={form.module} onChange={(e) => setForm({ ...form, module: e.target.value })} /></Field>
+            <Field label="Test scenario"><input name="test_scenario" autoComplete="off" className={inputCls} value={form.test_scenario} onChange={(e) => setForm({ ...form, test_scenario: e.target.value })} /></Field>
+            <Field label="Preconditions"><textarea name="preconditions" autoComplete="off" rows={2} className={inputCls} value={form.preconditions} onChange={(e) => setForm({ ...form, preconditions: e.target.value })} /></Field>
+            <Field label="Expected result" hint={form.expected_result.startsWith('Insufficient') ? 'Undefined: a human must define it before approval.' : undefined}><textarea name="expected_result" autoComplete="off" rows={2} className={inputCls} value={form.expected_result} onChange={(e) => setForm({ ...form, expected_result: e.target.value })} /></Field>
+            <Field label="Steps (one per line)"><textarea name="test_steps" autoComplete="off" rows={6} className={inputCls} value={form.steps} onChange={(e) => setForm({ ...form, steps: e.target.value })} /></Field>
+            <Field label="Test data (JSON)"><textarea name="test_data" autoComplete="off" rows={6} className={`${inputCls} font-mono`} value={form.test_data} onChange={(e) => setForm({ ...form, test_data: e.target.value })} /></Field>
+            <Field label="Priority"><select name="priority" className={inputCls} value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })}>{['High', 'Medium', 'Low'].map((p) => <option key={p}>{p}</option>)}</select></Field>
+            <Field label="Test type"><select name="test_type" className={inputCls} value={form.test_type} onChange={(e) => setForm({ ...form, test_type: e.target.value })}>{TYPES.map((p) => <option key={p}>{p}</option>)}</select></Field>
             <Field label="Linked automated test (for traceability)" hint="Choose the pytest function that automates this test case. Used by the RTM to report its execution status.">
-              <select className={inputCls} value={form.automation_ref} onChange={(e) => setForm({ ...form, automation_ref: e.target.value })}>
+              <select name="automation_ref" className={inputCls} value={form.automation_ref} onChange={(e) => setForm({ ...form, automation_ref: e.target.value })}>
                 <option value="">— not automated —</option>{catalog.map((c) => <option key={c}>{c}</option>)}</select></Field>
           </div>
           <div className="mt-4 flex gap-2"><Btn variant="primary" busy={busy === 'save'} onClick={saveEdit}>Save</Btn><Btn onClick={() => setEdit(null)}>Cancel</Btn></div>

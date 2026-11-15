@@ -18,12 +18,12 @@ export const NotifyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       {children}
       <div className="fixed bottom-4 right-4 z-50 flex w-80 flex-col gap-2" role="status" aria-live="polite">
         {toasts.map((t) => (
-          <div key={t.id} className={`flex items-start gap-2 rounded-lg border p-3 text-xs shadow-lg backdrop-blur ${
+          <div key={t.id} className={`flex items-start gap-2 rounded-md border p-3 text-xs shadow-lg ${
             t.kind === 'success' ? 'border-emerald-500/40 bg-emerald-950/90 text-emerald-200'
               : t.kind === 'error' ? 'border-rose-500/40 bg-rose-950/90 text-rose-200' : 'border-slate-600 bg-slate-900/95 text-slate-200'}`}>
-            {t.kind === 'success' ? <CheckCircle2 size={14} className="mt-0.5 shrink-0" /> : <AlertTriangle size={14} className="mt-0.5 shrink-0" />}
+            {t.kind === 'success' ? <CheckCircle2 size={14} aria-hidden="true" className="mt-0.5 shrink-0" /> : <AlertTriangle size={14} aria-hidden="true" className="mt-0.5 shrink-0" />}
             <span className="flex-1 break-words">{t.text}</span>
-            <button aria-label="Dismiss" onClick={() => setToasts((x) => x.filter((y) => y.id !== t.id))}><X size={12} /></button>
+            <button aria-label="Dismiss notification" onClick={() => setToasts((x) => x.filter((y) => y.id !== t.id))} className="rounded p-1 text-current/80 hover:bg-white/10 hover:text-current"><X size={12} aria-hidden="true" /></button>
           </div>
         ))}
       </div>

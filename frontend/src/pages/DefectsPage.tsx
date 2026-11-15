@@ -58,7 +58,7 @@ export const DefectsPage: React.FC<{ seedResultId?: string }> = ({ seedResultId 
       <section className="rounded-xl border border-slate-800 bg-slate-900/60">
         <div className="flex flex-wrap items-center gap-3 border-b border-slate-800 p-4">
           <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-100"><Bug size={15} className="text-indigo-400" />Failed results</h2>
-          <select aria-label="Execution" className={`${inputCls} w-auto`} value={execId} onChange={(e) => setExecId(e.target.value)}>
+          <select name="execution_id" aria-label="Execution" className={`${inputCls} w-auto`} value={execId} onChange={(e) => setExecId(e.target.value)}>
             <option value="">— choose execution —</option>{execs.map((x) => <option key={x.id} value={x.id}>{x.execution_id} · {x.suite_name} · {x.failed} failed</option>)}</select>
           <span className="text-[11px] text-slate-500">Evidence is read from stored results; the screenshot is attached as a file reference only (the text model cannot see images).</span>
         </div>
@@ -85,24 +85,24 @@ export const DefectsPage: React.FC<{ seedResultId?: string }> = ({ seedResultId 
                 <div className="flex gap-2"><Btn onClick={save} busy={busy === 'save'}><Save size={12} />Save edits</Btn><Btn variant="success" onClick={() => decide('approve')} disabled={sel.status === 'approved'}><CheckCircle2 size={12} />Approve</Btn><Btn variant="danger" onClick={() => decide('reject')}><XCircle size={12} />Reject</Btn></div>
               </div>
               <div className="grid gap-3 md:grid-cols-2">
-                <Field label="Defect title"><input className={inputCls} value={form.title ?? ''} onChange={(e) => set('title', e.target.value)} /></Field>
-                <Field label="Failure category (human can override)"><select className={inputCls} value={form.failure_category ?? ''} onChange={(e) => set('failure_category', e.target.value)}>{CATEGORIES.map((c) => <option key={c}>{c}</option>)}</select></Field>
-                <Field label="Severity"><select className={inputCls} value={form.severity ?? ''} onChange={(e) => set('severity', e.target.value)}>{SEV.map((c) => <option key={c}>{c}</option>)}</select></Field>
-                <Field label="Priority"><select className={inputCls} value={form.priority ?? ''} onChange={(e) => set('priority', e.target.value)}>{PRI.map((c) => <option key={c}>{c}</option>)}</select></Field>
+                <Field label="Defect title"><input name="defect_title" autoComplete="off" className={inputCls} value={form.title ?? ''} onChange={(e) => set('title', e.target.value)} /></Field>
+                <Field label="Failure category (human can override)"><select name="failure_category" className={inputCls} value={form.failure_category ?? ''} onChange={(e) => set('failure_category', e.target.value)}>{CATEGORIES.map((c) => <option key={c}>{c}</option>)}</select></Field>
+                <Field label="Severity"><select name="severity" className={inputCls} value={form.severity ?? ''} onChange={(e) => set('severity', e.target.value)}>{SEV.map((c) => <option key={c}>{c}</option>)}</select></Field>
+                <Field label="Priority"><select name="priority" className={inputCls} value={form.priority ?? ''} onChange={(e) => set('priority', e.target.value)}>{PRI.map((c) => <option key={c}>{c}</option>)}</select></Field>
               </div>
-              <Field label="Severity justification"><textarea rows={2} className={inputCls} value={form.severity_justification ?? ''} onChange={(e) => set('severity_justification', e.target.value)} /></Field>
-              <Field label="Description"><textarea rows={3} className={inputCls} value={form.description ?? ''} onChange={(e) => set('description', e.target.value)} /></Field>
-              <Field label="Steps to reproduce"><textarea rows={4} className={inputCls} value={form.steps_to_reproduce ?? ''} onChange={(e) => set('steps_to_reproduce', e.target.value)} /></Field>
+              <Field label="Severity justification"><textarea name="severity_justification" autoComplete="off" rows={2} className={inputCls} value={form.severity_justification ?? ''} onChange={(e) => set('severity_justification', e.target.value)} /></Field>
+              <Field label="Description"><textarea name="defect_description" autoComplete="off" rows={3} className={inputCls} value={form.description ?? ''} onChange={(e) => set('description', e.target.value)} /></Field>
+              <Field label="Steps to reproduce"><textarea name="steps_to_reproduce" autoComplete="off" rows={4} className={inputCls} value={form.steps_to_reproduce ?? ''} onChange={(e) => set('steps_to_reproduce', e.target.value)} /></Field>
               <div className="grid gap-3 md:grid-cols-2">
-                <Field label="Expected result"><textarea rows={3} className={inputCls} value={form.expected_result ?? ''} onChange={(e) => set('expected_result', e.target.value)} /></Field>
-                <Field label="Actual result"><textarea rows={3} className={inputCls} value={form.actual_result ?? ''} onChange={(e) => set('actual_result', e.target.value)} /></Field>
+                <Field label="Expected result"><textarea name="expected_result" autoComplete="off" rows={3} className={inputCls} value={form.expected_result ?? ''} onChange={(e) => set('expected_result', e.target.value)} /></Field>
+                <Field label="Actual result"><textarea name="actual_result" autoComplete="off" rows={3} className={inputCls} value={form.actual_result ?? ''} onChange={(e) => set('actual_result', e.target.value)} /></Field>
               </div>
-              <Field label="Possible root cause — UNVERIFIED HYPOTHESIS"><textarea rows={2} className={`${inputCls} border-amber-500/40`} value={form.possible_root_cause ?? ''} onChange={(e) => set('possible_root_cause', e.target.value)} /></Field>
+              <Field label="Possible root cause — UNVERIFIED HYPOTHESIS"><textarea name="possible_root_cause" autoComplete="off" rows={2} className={`${inputCls} border-amber-500/40`} value={form.possible_root_cause ?? ''} onChange={(e) => set('possible_root_cause', e.target.value)} /></Field>
               {([['Observed facts (from logs/error)', sel.observed_facts], ['Recommended investigation', sel.recommended_investigation], ['Suggested regression scenarios', sel.suggested_regression]] as [string, string[] | undefined][]).map(([t, items]) => (
                 <div key={t}><h4 className="mb-1 font-semibold text-slate-300">{t}</h4><ul className="list-inside list-disc space-y-0.5 text-slate-400">{(items ?? []).map((i, k) => <li key={k}>{i}</li>)}{!items?.length && <li className="list-none text-slate-500">none</li>}</ul></div>))}
-              <div className="rounded-lg border border-slate-800 bg-slate-950/50 p-3 text-[11px] text-slate-400">
+              <div className="rounded-lg border border-hairline bg-cream-light p-3 text-[11px] text-slate-400">
                 <b className="text-slate-300">Evidence trail:</b> execution {sel.execution_id}; screenshot analysed by AI: <b>{sel.screenshot_analyzed ? 'yes' : 'no'}</b>.
-                <details className="mt-1"><summary className="cursor-pointer">Exact evidence sent to the AI</summary><pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap">{JSON.stringify(sel.evidence, null, 2)}</pre></details>
+                <details className="mt-1"><summary className="cursor-pointer">Exact evidence sent to the AI</summary><pre className="code-panel mt-2 max-h-64 overflow-auto whitespace-pre-wrap rounded-md bg-code-surface p-3 font-mono text-code-text">{JSON.stringify(sel.evidence, null, 2)}</pre></details>
               </div>
             </div>
           )}

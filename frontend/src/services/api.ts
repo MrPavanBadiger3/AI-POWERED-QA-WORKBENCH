@@ -65,6 +65,8 @@ export const reportsApi = {
   generate: (executionId: string) => api.post(`/reports/${executionId}/generate`),
   pytestUrl: (executionId: string) => `/api/reports/${executionId}/html?variant=pytest`,
   summaryUrl: (executionId: string) => `/api/reports/${executionId}/html?variant=summary`,
+  pytestDownloadUrl: (executionId: string) => `/api/reports/${executionId}/html?variant=pytest&download=true`,
+  summaryDownloadUrl: (executionId: string) => `/api/reports/${executionId}/html?variant=summary&download=true`,
 };
 
 export const dataApi = {
