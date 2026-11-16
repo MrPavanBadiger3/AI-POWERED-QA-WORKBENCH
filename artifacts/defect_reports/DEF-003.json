@@ -1,0 +1,61 @@
+{
+  "defect_id": "DEF-003",
+  "title": "Login fails for valid user Pavan_1",
+  "description": "The data\u2011driven test attempted to log in with username 'Pavan_1' and a provided password expecting a successful login, but the application displayed an error banner indicating the credentials do not match any user, causing the test to fail.",
+  "steps_to_reproduce": "1. Load the dataset 'usernames_passwords.csv'.\n2. Use row 1 (username: Pavan_1, password: (provided)).\n3. Attempt to log in with these credentials.\n4. Observe the error banner and test assertion failure.",
+  "expected_result": "Insufficient information to determine.",
+  "actual_result": "The login attempt resulted in a failure with error banner 'Epic sadface: Username and password do not match any user in this service'.",
+  "severity": "High",
+  "priority": "High",
+  "severity_justification": "Login failure for a valid user prevents access to core functionality, representing a high impact issue.",
+  "failure_category": "Assertion Failure",
+  "application_defect_status": "undetermined",
+  "possible_root_cause": "Hypothesis: The password supplied in the CSV does not match the password stored for user 'Pavan_1' in the test environment, or the user record is missing/incorrect in the service.",
+  "observed_facts": [
+    "dataset: usernames_passwords.csv",
+    "row: 1",
+    "username: Pavan_1",
+    "password: (provided)",
+    "expected_outcome: success",
+    "actual_outcome: failure",
+    "error_banner: Epic sadface: Username and password do not match any user in this service",
+    "AssertionError: expected success, actual failure"
+  ],
+  "recommended_investigation": [
+    "Verify that user 'Pavan_1' exists in the authentication service with the expected password.",
+    "Manually attempt login with the same credentials to see if the error reproduces.",
+    "Check the contents of 'usernames_passwords.csv' for correctness of the password field for row 1.",
+    "Inspect environment configuration for any data seeding issues that might affect user accounts."
+  ],
+  "suggested_regression": [
+    "Run the data\u2011driven login test with multiple known\u2011good user credentials.\nValidate manual login for 'Pavan_1' after correcting any data issues.\nExecute login tests across different environments (dev, staging) to confirm consistency."
+  ],
+  "evidence": {
+    "execution_id": "EXEC-20261115-191945",
+    "suite": "data_driven",
+    "failed_test": "automation/tests/test_data_driven.py::test_data_driven_login[row1-Pavan_1-success]",
+    "test_case_id": null,
+    "expected_result": null,
+    "test_steps": null,
+    "error_message": "automation\\tests\\test_data_driven.py:44: in test_data_driven_login\n    assert actual == expected, f\"Row {row_no} user={username or '(empty)'!r}: expected {expected}, actual {actual}\"\nE   AssertionError: Row 1 user='Pavan_1': expected success, actual failure\nE   assert 'failure' == 'success'\nE     \nE     - success\nE     + failure",
+    "logs": "",
+    "data_driven_evidence": {
+      "dataset": "usernames_passwords.csv",
+      "row": 1,
+      "username": "Pavan_1",
+      "password": "(provided)",
+      "expected_outcome": "success",
+      "actual_outcome": "failure",
+      "result": "FAIL",
+      "error_banner": "Epic sadface: Username and password do not match any user in this service"
+    },
+    "screenshot_file": "EXEC-20261115-191945_automation_tests_test_data_driven.py_test_data_driven_login_row1-Pavan_1-success__1794750604393.png",
+    "screenshot_analyzed": false,
+    "screenshot_note": "Screenshot was captured but NOT analysed: the configured text model has no image input.",
+    "heuristic_category_hint_unverified": "Assertion Failure"
+  },
+  "test_case_id": null,
+  "execution_id": "EXEC-20261115-191945",
+  "status": "approved",
+  "root_cause_is_unverified_hypothesis": true
+}

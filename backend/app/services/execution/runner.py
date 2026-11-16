@@ -104,6 +104,7 @@ def _run(execution_pk: str, suite: str):
 
         cmd = [sys.executable, "-m", "pytest", *[str(t) for t in suite_targets()[suite]],
                "--json-report", f"--json-report-file={json_path}", f"--html={html_path}", "--self-contained-html",
+               f"--css={BACKEND_DIR / 'automation' / 'report.css'}",
                "-p", "no:cacheprovider", "--rootdir", str(BACKEND_DIR)]
         env = {**os.environ, "PYTHONPATH": str(BACKEND_DIR), "PYTHONIOENCODING": "utf-8",
                "QA_EXECUTION_ID": code, "QA_BASE_URL": settings.SAUCEDEMO_URL,

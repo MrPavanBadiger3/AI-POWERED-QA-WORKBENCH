@@ -1,0 +1,4 @@
+Requirement ID,Requirement Description,Linked Test Case IDs,Test Coverage Status,Latest Execution Status
+REQ-001,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-001; TC-002; TC-003; TC-004; TC-005,covered,not_executed
+REQ-002,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-006; TC-007; TC-008; TC-009,covered,not_executed
+REQ-003,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-010; TC-011; TC-012; TC-013,covered,not_executed

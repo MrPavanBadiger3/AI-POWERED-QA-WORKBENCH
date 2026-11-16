@@ -2,6 +2,7 @@ import csv
 import html
 import io
 import json
+import struct
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -12,6 +13,7 @@ from app.core.config import settings
 from app.models.models import (AIArtifact, DefectReport, Execution, GeneratedDocument, Requirement, TestCase, TestResult)
 from app.services.testcases.linking import latest_status
 
+REPORT_THEME_PATH = Path(__file__).resolve().parents[3] / "automation" / "report.css"
 
 # ---------------- dashboard ----------------
 def dashboard(db: Session) -> dict:
@@ -109,11 +111,21 @@ def _img_b64(name: str | None) -> str:
     if not name:
         return ""
     p = settings.SCREENSHOTS_DIR / Path(name).name
-    return f'<img alt="failure screenshot" style="max-width:100%;border:1px solid #ccc" src="data:image/png;base64,{base64.b64encode(p.read_bytes()).decode()}">' if p.exists() else ""
+    if not p.exists():
+        return ""
+    image = p.read_bytes()
+    if len(image) < 24 or image[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ValueError(f"Invalid PNG screenshot: {p.name}")
+    width, height = struct.unpack(">II", image[16:24])
+    encoded = base64.b64encode(image).decode()
+    return (f'<img alt="Failure screenshot" width="{width}" height="{height}" loading="lazy" decoding="async" '
+            f'style="max-width:100%;height:auto;border:1px solid #e5e5e5;border-radius:8px" '
+            f'src="data:image/png;base64,{encoded}">')
 
 
 def summary_report_html(db: Session, ex: Execution) -> str:
     e = html.escape
+    report_theme = REPORT_THEME_PATH.read_text(encoding="utf-8")
     rows = []
     for r in ex.results:
         meta = ", ".join(f"{e(str(k))}={e(str(v))}" for k, v in (r.meta or {}).items())
@@ -123,15 +135,19 @@ def summary_report_html(db: Session, ex: Execution) -> str:
         rows.append(f"<tr class='{r.status}'><td>{e(r.test_name)}</td><td>{r.status.upper()}</td><td>{(r.duration or 0):.2f}s</td><td>{meta}</td></tr>"
                     + (f"<tr><td colspan=4>{detail}</td></tr>" if detail else ""))
     from app.services.execution.runner import overall_status
-    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>{e(ex.execution_id)} - Execution Summary</title>
-<style>body{{font:14px/1.5 system-ui,sans-serif;margin:2rem;color:#111}}table{{border-collapse:collapse;width:100%}}td,th{{border:1px solid #ddd;padding:6px 8px;text-align:left;vertical-align:top}}
-.passed td:nth-child(2){{color:#067d2e;font-weight:600}}.failed td:nth-child(2){{color:#b00020;font-weight:600}}pre{{white-space:pre-wrap;background:#f6f6f6;padding:8px}}</style></head><body>
-<h1>Execution Summary - {e(ex.execution_id)}</h1>
+    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#fffefa"><title>{e(ex.execution_id)} - Execution Summary</title>
+<style>{report_theme}
+.summary-metrics, .summary-results{{width:100%;margin-top:12px;border:1px solid var(--report-hairline);border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;background:white}}
+.summary-metrics th,.summary-metrics td,.summary-results th,.summary-results td{{padding:10px 12px;border-bottom:1px solid var(--report-hairline);text-align:left;vertical-align:top}}
+.summary-metrics th,.summary-results th{{background:var(--report-cream);color:var(--report-ink)}}
+.summary-results pre{{white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px;background:var(--report-code);padding:12px;color:#f5f5f5;font:12px/1.5 "JetBrains Mono","SF Mono",Menlo,Consolas,monospace}}
+.summary-results tr.passed td:nth-child(2){{color:#176b38;font-weight:600}}.summary-results tr.failed td:nth-child(2){{color:#b42318;font-weight:600}}</style></head><body>
+<h1>Execution Summary — {e(ex.execution_id)}</h1>
 <p>Generated {datetime.now(timezone.utc).isoformat(timespec='seconds')} from stored pytest results. Suite: <b>{e(ex.suite_name or '')}</b>{(' / dataset: ' + e(ex.dataset)) if ex.dataset else ''}</p>
-<table><tr><th>Overall</th><th>Total</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Duration</th><th>Started</th><th>Finished</th></tr>
+<table class="summary-metrics"><tr><th>Overall</th><th>Total</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Duration</th><th>Started</th><th>Finished</th></tr>
 <tr><td>{overall_status(ex).upper()}</td><td>{ex.total_tests}</td><td>{ex.passed}</td><td>{ex.failed}</td><td>{ex.skipped}</td><td>{(ex.duration or 0):.1f}s</td><td>{e(str(ex.start_time or ''))}</td><td>{e(str(ex.end_time or ''))}</td></tr></table>
 {('<p><b>Execution error:</b> ' + e(ex.error_message) + '</p>') if ex.error_message else ''}
-<h2>Test results</h2><table><tr><th>Test</th><th>Result</th><th>Duration</th><th>Data / evidence</th></tr>{''.join(rows) or '<tr><td colspan=4>No test results recorded.</td></tr>'}</table>
+<h2>Test Results</h2><table class="summary-results"><tr><th>Test</th><th>Result</th><th>Duration</th><th>Data / evidence</th></tr>{''.join(rows) or '<tr><td colspan=4>No test results recorded.</td></tr>'}</table>
 </body></html>"""
 
 

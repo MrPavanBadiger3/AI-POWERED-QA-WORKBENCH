@@ -1,0 +1,178 @@
+[
+  {
+    "tc_id": "TC-001",
+    "requirement": "REQ-001",
+    "module": "Login",
+    "test_scenario": "Successful login with standard_user credentials",
+    "preconditions": "User is on the login page.",
+    "test_steps": [
+      "Enter username \"standard_user\"",
+      "Enter password \"secret_sauce\"",
+      "Click the login button"
+    ],
+    "test_data": {
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    "expected_result": "User is taken to the inventory page.",
+    "priority": "High",
+    "test_type": "Positive",
+    "automation_ref": "test_successful_login_standard_user"
+  },
+  {
+    "tc_id": "TC-006",
+    "requirement": "REQ-002",
+    "module": "Login",
+    "test_scenario": "Login with valid credentials navigates to inventory page",
+    "preconditions": "User is on the SauceDemo login page",
+    "test_steps": [
+      "Enter username \"standard_user\"",
+      "Enter password \"secret_sauce\"",
+      "Click the login button"
+    ],
+    "test_data": {
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    "expected_result": "User is taken to the inventory page",
+    "priority": "High",
+    "test_type": "Positive",
+    "automation_ref": null
+  },
+  {
+    "tc_id": "TC-007",
+    "requirement": "REQ-002",
+    "module": "Login",
+    "test_scenario": "Login with invalid credentials shows error and remains on login page",
+    "preconditions": "User is on the SauceDemo login page",
+    "test_steps": [
+      "Enter invalid username",
+      "Enter invalid password",
+      "Click the login button"
+    ],
+    "test_data": {
+      "username": "Insufficient information to determine.",
+      "password": "Insufficient information to determine."
+    },
+    "expected_result": "Error message is displayed and user stays on the login page",
+    "priority": "High",
+    "test_type": "Negative",
+    "automation_ref": null
+  },
+  {
+    "tc_id": "TC-008",
+    "requirement": "REQ-002",
+    "module": "Login",
+    "test_scenario": "Login with empty username shows error",
+    "preconditions": "User is on the SauceDemo login page",
+    "test_steps": [
+      "Leave username field empty",
+      "Enter password \"secret_sauce\"",
+      "Click the login button"
+    ],
+    "test_data": {
+      "username": "",
+      "password": "secret_sauce"
+    },
+    "expected_result": "Error message is displayed",
+    "priority": "High",
+    "test_type": "Negative",
+    "automation_ref": null
+  },
+  {
+    "tc_id": "TC-009",
+    "requirement": "REQ-002",
+    "module": "Login",
+    "test_scenario": "Login with empty password shows error",
+    "preconditions": "User is on the SauceDemo login page",
+    "test_steps": [
+      "Enter username \"standard_user\"",
+      "Leave password field empty",
+      "Click the login button"
+    ],
+    "test_data": {
+      "username": "standard_user",
+      "password": ""
+    },
+    "expected_result": "Error message is displayed",
+    "priority": "High",
+    "test_type": "Negative",
+    "automation_ref": null
+  },
+  {
+    "tc_id": "TC-010",
+    "requirement": "REQ-003",
+    "module": "Login",
+    "test_scenario": "Successful login with standard_user credentials navigates to inventory page",
+    "preconditions": "User is on the SauceDemo login page.",
+    "test_steps": [
+      "Enter username 'standard_user' and password 'secret_sauce'.",
+      "Click the login button."
+    ],
+    "test_data": {
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    "expected_result": "User is taken to the inventory page.",
+    "priority": "High",
+    "test_type": "Positive",
+    "automation_ref": "test_successful_login_navigates_to_inventory"
+  },
+  {
+    "tc_id": "TC-011",
+    "requirement": "REQ-003",
+    "module": "Login",
+    "test_scenario": "Login attempt with invalid credentials shows error and remains on login page",
+    "preconditions": "User is on the SauceDemo login page.",
+    "test_steps": [
+      "Enter invalid username and password.",
+      "Click the login button."
+    ],
+    "test_data": {
+      "username": "Insufficient information to determine.",
+      "password": "Insufficient information to determine."
+    },
+    "expected_result": "Error message is displayed and user remains on the login page.",
+    "priority": "High",
+    "test_type": "Negative",
+    "automation_ref": null
+  },
+  {
+    "tc_id": "TC-012",
+    "requirement": "REQ-003",
+    "module": "Login",
+    "test_scenario": "Login attempt with empty username shows error message",
+    "preconditions": "User is on the SauceDemo login page.",
+    "test_steps": [
+      "Leave the username field empty and enter a password.",
+      "Click the login button."
+    ],
+    "test_data": {
+      "username": "",
+      "password": "Insufficient information to determine."
+    },
+    "expected_result": "Error message is displayed.",
+    "priority": "Medium",
+    "test_type": "Negative",
+    "automation_ref": null
+  },
+  {
+    "tc_id": "TC-013",
+    "requirement": "REQ-003",
+    "module": "Login",
+    "test_scenario": "Login attempt with empty password shows error message",
+    "preconditions": "User is on the SauceDemo login page.",
+    "test_steps": [
+      "Enter a username and leave the password field empty.",
+      "Click the login button."
+    ],
+    "test_data": {
+      "username": "Insufficient information to determine.",
+      "password": ""
+    },
+    "expected_result": "Error message is displayed.",
+    "priority": "Medium",
+    "test_type": "Negative",
+    "automation_ref": null
+  }
+]

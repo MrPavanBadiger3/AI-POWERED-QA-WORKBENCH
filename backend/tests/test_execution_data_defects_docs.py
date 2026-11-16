@@ -6,6 +6,35 @@ from app.models.models import Execution, TestResult
 from tests.conftest import tc, wait_execution
 
 
+def test_execution_html_reports_are_styled_and_downloadable(client):
+    from app.core.config import settings
+
+    report_path = settings.REPORTS_DIR / "EXEC-STYLE.html"
+    summary_path = settings.REPORTS_DIR / "EXEC-STYLE_summary.html"
+    report_path.write_text("<!doctype html><html><head><title>Execution</title></head><body><h1>Execution</h1></body></html>", encoding="utf-8")
+    db = SessionLocal()
+    db.add(Execution(execution_id="EXEC-STYLE", suite_name="login", status="completed", report_path=str(report_path)))
+    db.commit()
+    db.close()
+    try:
+        inline = client.get("/api/reports/EXEC-STYLE/html")
+        assert inline.status_code == 200 and "qa-workbench-mistral-theme" in inline.text
+
+        downloaded = client.get("/api/reports/EXEC-STYLE/html?download=true")
+        assert downloaded.status_code == 200
+        assert downloaded.headers["content-disposition"] == 'attachment; filename="EXEC-STYLE.html"'
+        assert "qa-workbench-mistral-theme" in downloaded.text
+
+        summary = client.get("/api/reports/EXEC-STYLE/html?variant=summary")
+        assert summary.status_code == 200 and "qa-workbench-mistral-theme" in summary.text
+        summary_download = client.get("/api/reports/EXEC-STYLE/html?variant=summary&download=true")
+        assert summary_download.status_code == 200
+        assert summary_download.headers["content-disposition"] == 'attachment; filename="EXEC-STYLE_summary.html"'
+    finally:
+        report_path.unlink(missing_ok=True)
+        summary_path.unlink(missing_ok=True)
+
+
 def test_unknown_suite_and_dataset_rejected(client):
     assert client.post("/api/executions/run", json={"suite": "rm -rf /"}).status_code == 400
     assert client.post("/api/executions/run", json={"suite": "login", "dataset": "../../etc/passwd"}).status_code == 400
@@ -36,6 +65,9 @@ def test_real_pytest_subprocess_run_is_ingested(client):
     assert client.get(f"/api/reports/{ex['execution_id']}/html").status_code == 200
     summary = client.get(f"/api/reports/{ex['execution_id']}/html?variant=summary")
     assert summary.status_code == 200 and ex["execution_id"] in summary.text
+    from app.core.config import settings
+    generated_report = settings.REPORTS_DIR / f"{ex['execution_id']}.html"
+    assert "qa-workbench-mistral-theme" in generated_report.read_text(encoding="utf-8")
     dash = client.get("/api/dashboard/stats").json()
     assert dash["total_executed_tests"] == 5 and dash["passed"] == ex["passed"] and dash["failed"] == ex["failed"]
 

@@ -1,0 +1,13 @@
+{
+  "req_id": "REQ-001",
+  "title": "SauceDemo user authentication",
+  "description": "Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.",
+  "user_story": "As a SauceDemo customer, I want to log in with my username and password so that I can access the product catalogue.",
+  "acceptance_criteria": "1. Given standard_user / secret_sauce, the user is taken to the inventory page.\n2. Given invalid credentials, an error message is displayed and the user stays on the login page.\n3. Given empty username or password, an error message is displayed.",
+  "source_snapshot": {
+    "title": "SauceDemo user authentication",
+    "description": "Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.",
+    "user_story": "As a SauceDemo customer, I want to log in with my username and password so that I can access the product catalogue.",
+    "acceptance_criteria": "1. Given standard_user / secret_sauce, the user is taken to the inventory page.\n2. Given invalid credentials, an error message is displayed and the user stays on the login page.\n3. Given empty username or password, an error message is displayed."
+  }
+}
