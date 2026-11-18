@@ -38,6 +38,13 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+AVAILABLE_GROQ_MODELS = (
+    "openai/gpt-oss-120b",
+    "openai/gpt-oss-20b",
+    "qwen/qwen3.6-27b",
+)
+RECOMMENDED_GROQ_MODEL = AVAILABLE_GROQ_MODELS[0]
+
 for _d in (settings.REPORTS_DIR, settings.SCREENSHOTS_DIR, settings.TEST_DATA_DIR / "uploads",
            settings.GENERATED_DIR, settings.ARTIFACTS_DIR):
     _d.mkdir(parents=True, exist_ok=True)

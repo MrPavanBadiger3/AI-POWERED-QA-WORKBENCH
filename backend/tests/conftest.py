@@ -33,12 +33,12 @@ class ScriptedProvider:
     def __init__(self):
         self.queue, self.calls = [], []
 
-    async def complete(self, system, user):
+    async def complete(self, system, user, model):
         self.calls.append((system, user))
         item = self.queue.pop(0)
         if isinstance(item, Exception):
             raise item
-        return ProviderResponse(item if isinstance(item, str) else json.dumps(item), "test-double", 10, 20)
+        return ProviderResponse(item if isinstance(item, str) else json.dumps(item), model, 10, 20)
 
 
 def analysis(quote="log in with valid credentials", **over):

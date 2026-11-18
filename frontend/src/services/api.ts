@@ -89,6 +89,7 @@ export const docApi = {
 export const systemApi = {
   health: () => api.get('/health'),
   config: () => api.get('/config/status'),
+  updateModel: (model: string) => api.put('/config/model', { model }),
   testAi: () => api.post('/config/test-ai'),
   dashboard: () => api.get('/dashboard/stats'),
 };

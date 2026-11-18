@@ -1,12 +1,76 @@
+import asyncio
+from types import SimpleNamespace
+
+import groq
+import httpx
+
 from app.services.ai.ai_service import AIError, GroqProvider, ai_service
 from tests.conftest import REQ_TEXT, analysis
+
+
+def test_gpt_oss_retries_without_rejected_json_response_format():
+    calls = []
+
+    class Completions:
+        async def create(self, **kwargs):
+            calls.append(kwargs)
+            if len(calls) == 1:
+                raise groq.BadRequestError(
+                    "response_format json_object is unsupported",
+                    response=httpx.Response(400, request=httpx.Request("POST", "https://api.groq.com")),
+                    body={"error": "unsupported response_format"},
+                )
+            return SimpleNamespace(
+                choices=[SimpleNamespace(message=SimpleNamespace(content='{"ok":true}'))],
+                usage=None,
+            )
+
+    provider = GroqProvider()
+    provider._get_client = lambda: SimpleNamespace(chat=SimpleNamespace(completions=Completions()))
+    response = asyncio.run(provider.complete("system", "user", "openai/gpt-oss-120b"))
+
+    assert response.text == '{"ok":true}'
+    assert calls[0]["reasoning_effort"] == "low" and calls[0]["max_tokens"] == 8192
+    assert calls[0]["response_format"] == {"type": "json_object"}
+    assert "response_format" not in calls[1]
+
+
+def test_groq_model_not_found_has_settings_guidance():
+    class Completions:
+        async def create(self, **kwargs):
+            raise groq.NotFoundError(
+                "model not found",
+                response=httpx.Response(404, request=httpx.Request("POST", "https://api.groq.com")),
+                body={"error": "model not found"},
+            )
+
+    provider = GroqProvider()
+    provider._get_client = lambda: SimpleNamespace(chat=SimpleNamespace(completions=Completions()))
+    try:
+        asyncio.run(provider.complete("system", "user", "openai/gpt-oss-20b"))
+    except AIError as e:
+        assert e.message == "Model not found or retired by Groq. Pick another model in Settings."
+    else:
+        raise AssertionError("Expected Groq model-not-found error")
 
 
 def test_health_and_config_do_not_leak_key(client):
     assert client.get("/api/health").json()["status"] == "healthy"
     cfg = client.get("/api/config/status").json()
     assert cfg["groq_api_configured"] is False
+    assert cfg["available_models"] == ["openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.6-27b"]
+    assert cfg["groq_model"] == "openai/gpt-oss-120b"
     assert "key" not in " ".join(cfg.keys()).replace("groq_api_configured", "")
+
+
+def test_model_selection_is_validated_persisted_and_used_in_ledger(client, fake):
+    assert client.put("/api/config/model", json={"model": "unknown/model"}).status_code == 400
+    selected = "qwen/qwen3.6-27b"
+    assert client.put("/api/config/model", json={"model": selected}).json()["groq_model"] == selected
+    fake.queue.append(analysis())
+    assert client.post("/api/requirements/analyze", json=REQ_TEXT).status_code == 200
+    assert client.get("/api/config/status").json()["groq_model"] == selected
+    assert client.get("/api/governance/artifacts").json()[0]["model"] == selected
 
 
 def test_missing_api_key_is_a_clear_503_not_a_fake_answer(client):

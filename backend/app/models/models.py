@@ -180,3 +180,9 @@ class IDCounter(Base):
     __tablename__ = "id_counters"
     prefix = Column(String, primary_key=True)
     value = Column(Integer, nullable=False, default=0)
+
+
+class AppConfig(Base):
+    __tablename__ = "app_config"
+    key = Column(String, primary_key=True)
+    value = Column(String, nullable=False)

@@ -11,8 +11,10 @@ from app.services.ai.prompts import PROMPTS
 T = TypeVar("T", bound=BaseModel)
 
 
-def record_failure(db: Session, artifact_type: str, prompt_key: str, code: str, message: str, raw: str, refs: dict | None):
+def record_failure(db: Session, artifact_type: str, prompt_key: str, code: str, message: str, raw: str,
+                   refs: dict | None, model: str | None = None):
     db.add(AIArtifact(artifact_type=artifact_type, prompt_key=prompt_key, validation_status="failed",
+                      model_used=model,
                       validation_issues=[{"severity": "error", "code": code, "message": message}],
                       review_status="rejected", reviewed_at=now_utc(), source_refs=refs or {}, raw_output=(raw or "")[:8000]))
     db.commit()
@@ -26,16 +28,16 @@ async def run_ai(db: Session, prompt_key: str, user_content: str, schema: Type[T
     schema-invalid outputs ARE stored as 'failed' so governance can show validation failures.
     """
     try:
-        data, resp = await ai_service.call(PROMPTS[prompt_key], user_content)
+        data, resp = await ai_service.call(PROMPTS[prompt_key], user_content, db)
     except AIError as e:
         if e.code in ("ai_malformed_json", "ai_empty_response"):
-            record_failure(db, artifact_type, prompt_key, e.code, e.message, e.raw, refs)
+            record_failure(db, artifact_type, prompt_key, e.code, e.message, e.raw, refs, e.model)
         raise
     try:
         return schema.model_validate(data), resp
     except ValidationError as e:
         problems = "; ".join(f"{'.'.join(str(p) for p in err['loc'])}: {err['msg']}" for err in e.errors()[:6])
-        record_failure(db, artifact_type, prompt_key, "ai_schema_invalid", problems, str(data), refs)
+        record_failure(db, artifact_type, prompt_key, "ai_schema_invalid", problems, str(data), refs, resp.model)
         raise AIError("ai_schema_invalid", f"AI output failed schema validation and was rejected: {problems}", 422, retryable=True, raw=str(data))
 
 
