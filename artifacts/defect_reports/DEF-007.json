@@ -1,0 +1,59 @@
+{
+  "defect_id": "DEF-007",
+  "title": "Login fails for locked_out_user where test expects success",
+  "description": "The data\u2011driven test attempts to log in with username 'locked_out_user' and expects a successful login, but the application returns a locked\u2011out error banner and the test asserts failure.",
+  "steps_to_reproduce": "1. Load dataset 'usernames_passwords.csv' row 6.\n2. Attempt login with username 'locked_out_user' and the provided password.\n3. Verify that the login outcome is 'success'.",
+  "expected_result": "Insufficient information to determine.",
+  "actual_result": "The login attempt resulted in 'failure' with error banner 'Epic sadface: Sorry, this user has been locked out.'",
+  "severity": "Needs Human Assessment",
+  "priority": "Needs Human Assessment",
+  "severity_justification": "Requires human assessment.",
+  "failure_category": "Assertion Failure",
+  "application_defect_status": "undetermined",
+  "possible_root_cause": "Hypothesis: The test expectation is incorrect for a user that is known to be locked out, or the application incorrectly allows a locked\u2011out user to succeed.",
+  "observed_facts": [
+    "dataset: usernames_passwords.csv",
+    "row: 6",
+    "username: locked_out_user",
+    "expected_outcome: success",
+    "actual_outcome: failure",
+    "error_banner: Epic sadface: Sorry, this user has been locked out.",
+    "AssertionError: expected success, actual failure"
+  ],
+  "recommended_investigation": [
+    "Confirm business rules for 'locked_out_user' \u2013 should login succeed or be blocked?",
+    "Check if the test data row 6 is intended to represent a locked\u2011out scenario.",
+    "Validate that the application consistently returns the locked\u2011out error for this user across environments."
+  ],
+  "suggested_regression": [
+    "Attempt login with 'locked_out_user' and verify that the error banner 'Epic sadface: Sorry, this user has been locked out.' is displayed."
+  ],
+  "evidence": {
+    "execution_id": "EXEC-20261115-193333",
+    "suite": "data_driven",
+    "failed_test": "automation/tests/test_data_driven.py::test_data_driven_login[row6-locked_out_user-success]",
+    "test_case_id": null,
+    "expected_result": null,
+    "test_steps": null,
+    "error_message": "automation\\tests\\test_data_driven.py:44: in test_data_driven_login\n    assert actual == expected, f\"Row {row_no} user={username or '(empty)'!r}: expected {expected}, actual {actual}\"\nE   AssertionError: Row 6 user='locked_out_user': expected success, actual failure\nE   assert 'failure' == 'success'\nE     \nE     - success\nE     + failure",
+    "logs": "",
+    "data_driven_evidence": {
+      "dataset": "usernames_passwords.csv",
+      "row": 6,
+      "username": "locked_out_user",
+      "password": "(provided)",
+      "expected_outcome": "success",
+      "actual_outcome": "failure",
+      "result": "FAIL",
+      "error_banner": "Epic sadface: Sorry, this user has been locked out."
+    },
+    "screenshot_file": "EXEC-20261115-193333_automation_tests_test_data_driven.py_test_data_driven_login_row6-locked_out_user-success__1794751432907.png",
+    "screenshot_analyzed": false,
+    "screenshot_note": "Screenshot was captured but NOT analysed: the configured text model has no image input.",
+    "heuristic_category_hint_unverified": "Assertion Failure"
+  },
+  "test_case_id": null,
+  "execution_id": "EXEC-20261115-193333",
+  "status": "approved",
+  "root_cause_is_unverified_hypothesis": true
+}

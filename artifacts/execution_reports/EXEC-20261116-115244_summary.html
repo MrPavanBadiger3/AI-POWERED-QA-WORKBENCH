@@ -1,0 +1,307 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#fffefa"><title>EXEC-20261116-115244 - Execution Summary</title>
+<style>/* qa-workbench-mistral-theme */
+:root {
+  color-scheme: light;
+  --report-primary: #fa520f;
+  --report-primary-deep: #cc3a05;
+  --report-cream: #fff8e0;
+  --report-cream-light: #fffaeb;
+  --report-ink: #1f1f1f;
+  --report-body: #4a4a4a;
+  --report-muted: #6a6a6a;
+  --report-hairline: #e5e5e5;
+  --report-beige: #e6d5a8;
+  --report-code: #1c1c1e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 28px clamp(16px, 4vw, 56px);
+  background: #fffefa;
+  color: var(--report-ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+}
+
+body::before,
+body::after {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fa520f 0%, #ff8105 35%, #ffd900 70%, #fff8e0 100%);
+  content: "";
+}
+
+body::before {
+  margin: -8px 0 28px;
+}
+
+body::after {
+  margin-top: 48px;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--report-ink);
+  text-wrap: balance;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-family: "PP Editorial Old", "Times New Roman", Georgia, serif;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  line-height: 1.12;
+}
+
+h2 {
+  margin: 28px 0 12px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+p {
+  color: var(--report-body);
+}
+
+a {
+  color: var(--report-primary-deep);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--report-primary);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--report-primary);
+  outline-offset: 2px;
+}
+
+button,
+.filters button,
+.collapse button,
+.summary__reload__button {
+  min-height: 36px;
+  border: 1px solid var(--report-beige);
+  border-radius: 6px;
+  background: white;
+  padding: 6px 12px;
+  color: var(--report-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover,
+.filters button:hover,
+.collapse button:hover,
+.summary__reload__button:hover {
+  border-color: var(--report-primary);
+  background: var(--report-cream);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--report-primary);
+}
+
+#environment {
+  width: auto;
+  max-width: 100%;
+  margin: 12px 0 28px;
+  overflow: hidden;
+  border: 1px solid var(--report-hairline);
+  border-radius: 8px;
+  border-collapse: separate;
+  background: white;
+}
+
+#environment td {
+  border: 1px solid var(--report-hairline);
+  padding: 8px 12px;
+  color: var(--report-body);
+  vertical-align: top;
+}
+
+#environment tr:nth-child(odd) {
+  background: var(--report-cream-light);
+}
+
+#environment ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+#results-table {
+  width: 100%;
+  margin-top: 12px;
+  overflow-x: auto;
+  border: 1px solid var(--report-hairline);
+  border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  color: var(--report-body);
+  font-size: 13px;
+}
+
+#results-table th,
+#results-table td {
+  border: 0;
+  border-bottom: 1px solid var(--report-hairline);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+#results-table th {
+  background: var(--report-cream);
+  color: var(--report-ink);
+  font-weight: 600;
+}
+
+#results-table tr:hover td {
+  background: var(--report-cream-light);
+}
+
+#results-table .col-result,
+span.passed,
+.passed .col-result {
+  color: #176b38;
+  font-weight: 600;
+}
+
+span.failed,
+span.error,
+.failed .col-result,
+.error .col-result,
+.xpassed .col-result {
+  color: #b42318;
+  font-weight: 600;
+}
+
+span.skipped,
+span.xfailed,
+span.rerun,
+.skipped .col-result,
+.xfailed .col-result,
+.rerun .col-result {
+  color: #92400e;
+  font-weight: 600;
+}
+
+.logwrapper {
+  max-height: 280px;
+  overflow: auto;
+  border: 1px solid #38383b;
+  border-radius: 6px;
+  background: var(--report-code);
+  padding: 12px;
+  color: #f5f5f5;
+}
+
+.logwrapper .log {
+  color: #f5f5f5;
+  font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.logwrapper .log .error,
+.logwrapper .log .failed {
+  color: #ffaaa3;
+}
+
+.media {
+  max-width: 100%;
+  border: 1px solid var(--report-hairline);
+  border-radius: 8px;
+  background: var(--report-cream-light);
+  padding: 8px;
+}
+
+.media img,
+.media video {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.summary__data,
+.controls,
+.filters,
+.collapse {
+  margin-block: 12px;
+}
+
+.filters,
+.collapse {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter__label {
+  color: var(--report-body);
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 18px 14px;
+  }
+
+  #environment {
+    width: 100%;
+  }
+
+  #environment td {
+    padding: 6px 8px;
+    overflow-wrap: anywhere;
+  }
+
+  #results-table {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.summary-metrics, .summary-results{width:100%;margin-top:12px;border:1px solid var(--report-hairline);border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;background:white}
+.summary-metrics th,.summary-metrics td,.summary-results th,.summary-results td{padding:10px 12px;border-bottom:1px solid var(--report-hairline);text-align:left;vertical-align:top}
+.summary-metrics th,.summary-results th{background:var(--report-cream);color:var(--report-ink)}
+.summary-results pre{white-space:pre-wrap;overflow-wrap:anywhere;border-radius:6px;background:var(--report-code);padding:12px;color:#f5f5f5;font:12px/1.5 "JetBrains Mono","SF Mono",Menlo,Consolas,monospace}
+.summary-results tr.passed td:nth-child(2){color:#176b38;font-weight:600}.summary-results tr.failed td:nth-child(2){color:#b42318;font-weight:600}</style></head><body>
+<h1>Execution Summary — EXEC-20261116-115244</h1>
+<p>Generated 2026-11-16T11:41:29+00:00 from stored pytest results. Suite: <b>approved_scripts</b></p>
+<table class="summary-metrics"><tr><th>Overall</th><th>Total</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Duration</th><th>Started</th><th>Finished</th></tr>
+<tr><td>PASSED</td><td>5</td><td>5</td><td>0</td><td>0</td><td>27.6s</td><td>2026-11-16 06:22:44.085202</td><td>2026-11-16 06:23:11.717698</td></tr></table>
+
+<h2>Test Results</h2><table class="summary-results"><tr><th>Test</th><th>Result</th><th>Duration</th><th>Data / evidence</th></tr><tr class='passed'><td>automation/generated/test_gen_scr_001.py::test_successful_login_standard_user</td><td>PASSED</td><td>12.47s</td><td></td></tr><tr class='passed'><td>automation/generated/test_gen_scr_002.py::test_successful_login_navigates_to_inventory</td><td>PASSED</td><td>0.63s</td><td></td></tr><tr class='passed'><td>automation/generated/test_gen_scr_003.py::test_invalid_login_shows_error</td><td>PASSED</td><td>10.56s</td><td></td></tr><tr class='passed'><td>automation/generated/test_gen_scr_005.py::test_invalid_login_shows_error</td><td>PASSED</td><td>0.56s</td><td></td></tr><tr class='passed'><td>automation/generated/test_gen_scr_006.py::test_successful_login_navigates_to_inventory</td><td>PASSED</td><td>1.61s</td><td></td></tr></table>
+</body></html>

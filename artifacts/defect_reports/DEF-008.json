@@ -1,0 +1,63 @@
+{
+  "defect_id": "DEF-008",
+  "title": "Login fails for user Pavan_1 despite expected success",
+  "description": "The data\u2011driven test attempted to log in with username 'Pavan_1' and a provided password from row 1 of the CSV file. The test expected a successful login but the application returned a failure banner indicating the credentials do not match any user. The assertion in the test failed.",
+  "steps_to_reproduce": "1. Load dataset 'usernames_passwords.csv' row 1.\n2. Attempt login with username 'Pavan_1' and the associated password.\n3. Observe the login result and compare to expected outcome 'success'.",
+  "expected_result": "Insufficient information to determine.",
+  "actual_result": "The login attempt resulted in 'failure' with error banner 'Epic sadface: Username and password do not match any user in this service'.",
+  "severity": "Medium",
+  "priority": "High",
+  "severity_justification": "Login failure for a user expected to succeed impacts core authentication functionality, though the exact cause (application vs test data) is unclear.",
+  "failure_category": "Assertion Failure",
+  "application_defect_status": "undetermined",
+  "possible_root_cause": "Hypothesis: The password supplied in the CSV row is incorrect or the user does not exist in the target environment, leading the application to reject the credentials.",
+  "observed_facts": [
+    "dataset: usernames_passwords.csv",
+    "row: 1",
+    "username: Pavan_1",
+    "expected_outcome: success",
+    "actual_outcome: failure",
+    "error_banner: Epic sadface: Username and password do not match any user in this service",
+    "AssertionError: Row 1 user='Pavan_1': expected success, actual failure"
+  ],
+  "recommended_investigation": [
+    "Verify that the credentials for user 'Pavan_1' are correct in the test environment.",
+    "Manually perform a login with the same username and password to see if the issue reproduces.",
+    "Check the CSV file for data integrity and possible whitespace or encoding issues.",
+    "Inspect application logs for authentication failures for this user.",
+    "Run the same test against a known good environment to rule out environment\u2011specific issues."
+  ],
+  "suggested_regression": [
+    "Login with 'Pavan_1' using the same credentials after correcting any data issues.",
+    "Login with other valid users from the CSV to confirm whether the problem is isolated to this row.",
+    "Negative test: attempt login with intentionally invalid credentials to ensure error handling works."
+  ],
+  "evidence": {
+    "execution_id": "EXEC-20261115-191945",
+    "suite": "data_driven",
+    "failed_test": "automation/tests/test_data_driven.py::test_data_driven_login[row1-Pavan_1-success]",
+    "test_case_id": null,
+    "expected_result": null,
+    "test_steps": null,
+    "error_message": "automation\\tests\\test_data_driven.py:44: in test_data_driven_login\n    assert actual == expected, f\"Row {row_no} user={username or '(empty)'!r}: expected {expected}, actual {actual}\"\nE   AssertionError: Row 1 user='Pavan_1': expected success, actual failure\nE   assert 'failure' == 'success'\nE     \nE     - success\nE     + failure",
+    "logs": "",
+    "data_driven_evidence": {
+      "dataset": "usernames_passwords.csv",
+      "row": 1,
+      "username": "Pavan_1",
+      "password": "(provided)",
+      "expected_outcome": "success",
+      "actual_outcome": "failure",
+      "result": "FAIL",
+      "error_banner": "Epic sadface: Username and password do not match any user in this service"
+    },
+    "screenshot_file": "EXEC-20261115-191945_automation_tests_test_data_driven.py_test_data_driven_login_row1-Pavan_1-success__1794750604393.png",
+    "screenshot_analyzed": false,
+    "screenshot_note": "Screenshot was captured but NOT analysed: the configured text model has no image input.",
+    "heuristic_category_hint_unverified": "Assertion Failure"
+  },
+  "test_case_id": null,
+  "execution_id": "EXEC-20261115-191945",
+  "status": "approved",
+  "root_cause_is_unverified_hypothesis": true
+}

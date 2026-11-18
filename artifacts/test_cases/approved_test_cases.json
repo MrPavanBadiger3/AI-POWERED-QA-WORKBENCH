@@ -135,7 +135,7 @@
     "expected_result": "Error message is displayed and user remains on the login page.",
     "priority": "High",
     "test_type": "Negative",
-    "automation_ref": null
+    "automation_ref": "test_invalid_login_shows_error"
   },
   {
     "tc_id": "TC-012",
@@ -174,5 +174,100 @@
     "priority": "Medium",
     "test_type": "Negative",
     "automation_ref": null
+  },
+  {
+    "tc_id": "TC-014",
+    "requirement": "REQ-004",
+    "module": "Insufficient information to determine.",
+    "test_scenario": "Successful login with valid credentials navigates to inventory page",
+    "preconditions": "Insufficient information to determine.",
+    "test_steps": [
+      "Insufficient information to determine."
+    ],
+    "test_data": {
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    "expected_result": "User is taken to the inventory page.",
+    "priority": "Medium",
+    "test_type": "Positive",
+    "automation_ref": "test_successful_login_navigates_to_inventory"
+  },
+  {
+    "tc_id": "TC-018",
+    "requirement": "REQ-005",
+    "module": "Insufficient information to determine.",
+    "test_scenario": "Successful login with valid credentials navigates to inventory page",
+    "preconditions": "User is on the login page",
+    "test_steps": [
+      "Enter username \"standard_user\"",
+      "Enter password \"secret_sauce\"",
+      "Click the login button"
+    ],
+    "test_data": {
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    "expected_result": "User is taken to the inventory page",
+    "priority": "Medium",
+    "test_type": "Positive",
+    "automation_ref": "test_successful_login_navigates_to_inventory"
+  },
+  {
+    "tc_id": "TC-019",
+    "requirement": "REQ-005",
+    "module": "Insufficient information to determine.",
+    "test_scenario": "Login with invalid credentials shows error and remains on login page",
+    "preconditions": "User is on the login page",
+    "test_steps": [
+      "Enter invalid username",
+      "Enter invalid password",
+      "Click the login button"
+    ],
+    "test_data": {
+      "username": "Insufficient information to determine.",
+      "password": "Insufficient information to determine."
+    },
+    "expected_result": "Error message is displayed and the user stays on the login page",
+    "priority": "High",
+    "test_type": "Negative",
+    "automation_ref": "test_login_with_invalid_credentials_shows_error"
+  },
+  {
+    "tc_id": "TC-025",
+    "requirement": "REQ-006",
+    "module": "Inventory Page",
+    "test_scenario": "Sort by price low\u2013high and verify cheapest product appears first",
+    "preconditions": "User is on the inventory page with the product list displayed.",
+    "test_steps": [
+      "Open the sort dropdown.",
+      "Select the 'Price low to high' sort option.",
+      "Observe the product list ordering."
+    ],
+    "test_data": {},
+    "expected_result": "The cheapest product appears first in the list.",
+    "priority": "High",
+    "test_type": "Positive",
+    "automation_ref": null
+  },
+  {
+    "tc_id": "TC-028",
+    "requirement": "REQ-007",
+    "module": "Login",
+    "test_scenario": "Login with valid credentials navigates to inventory page",
+    "preconditions": "User is on the SauceDemo login page",
+    "test_steps": [
+      "Enter username \"standard_user\"",
+      "Enter password \"secret_sauce\"",
+      "Click the login button"
+    ],
+    "test_data": {
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    "expected_result": "User is taken to the inventory page",
+    "priority": "High",
+    "test_type": "Positive",
+    "automation_ref": "test_login_navigates_to_inventory"
   }
 ]

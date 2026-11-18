@@ -1,0 +1,13 @@
+{
+  "req_id": "REQ-006",
+  "title": "Product sorting on the inventory page",
+  "description": "Users must be able to sort the products on the inventory page by name and by price. The list must reorder immediately after a sort option is selected.",
+  "user_story": "As a shopper, I want to sort products so that I can find items faster.",
+  "acceptance_criteria": "1. Sorting by name A to Z lists products in ascending alphabetical order.\n2. Sorting by name Z to A lists products in descending alphabetical order.\n3. Sorting by price low to high lists the cheapest product first.\n4. Sorting by price high to low lists the most expensive product first.",
+  "source_snapshot": {
+    "title": "Product sorting on the inventory page",
+    "description": "Users must be able to sort the products on the inventory page by name and by price. The list must reorder immediately after a sort option is selected.",
+    "user_story": "As a shopper, I want to sort products so that I can find items faster.",
+    "acceptance_criteria": "1. Sorting by name A to Z lists products in ascending alphabetical order.\n2. Sorting by name Z to A lists products in descending alphabetical order.\n3. Sorting by price low to high lists the cheapest product first.\n4. Sorting by price high to low lists the most expensive product first."
+  }
+}

@@ -1,4 +1,8 @@
 Requirement ID,Requirement Description,Linked Test Case IDs,Test Coverage Status,Latest Execution Status
-REQ-001,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-001; TC-002; TC-003; TC-004; TC-005,covered,not_executed
+REQ-001,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-001; TC-002; TC-003; TC-004; TC-005,covered,passed
 REQ-002,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-006; TC-007; TC-008; TC-009,covered,not_executed
-REQ-003,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-010; TC-011; TC-012; TC-013,covered,not_executed
+REQ-003,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-010; TC-011; TC-012; TC-013,covered,partially_executed
+REQ-004,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-014; TC-015; TC-016; TC-017,covered,passed
+REQ-005,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-018; TC-019; TC-020; TC-021; TC-022,covered,passed
+REQ-006,Users must be able to sort the products on the inventory page by name and by price. The list must reorder immediately after a sort option is selected.,TC-023; TC-024; TC-025; TC-026; TC-027,covered,not_executed
+REQ-007,Users must be able to log in to SauceDemo using valid credentials and reach the inventory page. Invalid credentials and empty submissions must be rejected.,TC-028; TC-029; TC-030; TC-031,covered,passed
